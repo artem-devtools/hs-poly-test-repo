@@ -25,7 +25,7 @@ mostFreq numbers = digit
 findLongestString :: [String] -> String
 findLongestString strings = s
   where 
-    (s, l) = foldr (\str (s, l) -> let len = length str in if len > (l) then (str, len) else (s, l)) ([], 0) strings
+    (s, l) = foldr (\str (s, l) -> let len = length str in if len > l then (str, len) else (s, l)) ([], 0) strings
 
 myFlatMap :: (a -> [b]) -> [a] -> [b]
 myFlatMap _ [] = []
@@ -59,11 +59,11 @@ grokBy _ [] = []
 grokBy f xs = result
   where
     fs = map f xs
-    f2x = myAccosiate fs xs
-    origins fi = map (\(_, b) -> b) $ filter (\(a, _) -> a == fi) f2x
+    f2x = myAssociate fs xs
+    origins fi = foldr (\(f, x) acc -> if f == fi then x:acc else acc) [] f2x
     result = map (\fi -> (fi, origins fi)) $ uniq fs
 
-myAccosiate :: [a] -> [b] -> [(a, b)]
-myAccosiate _ [] = []
-myAccosiate [] _ = []
-myAccosiate (a:as) (b:bs) = ((a, b):(myAccosiate as bs))
+myAssociate :: [a] -> [b] -> [(a, b)]
+myAssociate _ [] = []
+myAssociate [] _ = []
+myAssociate (a:as) (b:bs) = ((a, b):(myAssociate as bs))
